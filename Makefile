@@ -159,7 +159,8 @@ else
   CPP     = $(WRAPCC) xtensa-lx106-elf-gcc -E
   OBJCOPY = xtensa-lx106-elf-objcopy
   FIRMWAREDIR = ../bin/
-  WGET = wget --tries=10 --timeout=15 --waitretry=30 --read-timeout=20 --retry-connrefused
+#  WGET = wget --tries=10 --timeout=15 --waitretry=30 --read-timeout=20 --retry-connrefused
+  WGET = echo
 endif
 
 GITHUB_SDK       = https://github.com/espressif/ESP8266_NONOS_SDK
@@ -294,7 +295,7 @@ toolchain: $(TOOLCHAIN_ROOT)/bin $(ESPTOOL)
 $(TOOLCHAIN_ROOT)/bin: $(TOP_DIR)/cache/toolchain-esp8266-$(GCCTOOLCHAIN).tar.xz
 	mkdir -p $(TOP_DIR)/tools/toolchains/
 	$(summary) EXTRACT $(patsubst $(TOP_DIR)/%,%,$<)
-	tar -xJf $< -C $(TOP_DIR)/tools/toolchains/
+#	tar -xJf $< -C $(TOP_DIR)/tools/toolchains/
 	touch $@
 
 $(TOP_DIR)/cache/toolchain-esp8266-$(GCCTOOLCHAIN).tar.xz:
@@ -428,7 +429,7 @@ $(OBJODIR)/%.d: %.c
 	$(summary) DEPEND: CC $(patsubst $(TOP_DIR)/%,%,$(CURDIR))/$<
 	@set -e; rm -f $@; \
 	$(CC) -M $(CFLAGS) $< > $@.$$$$; \
-	sed 's,\($*\.o\)[ :]*,$(OBJODIR)/\1 $@ : ,g' < $@.$$$$ > $@; \
+	gsed 's,\($*\.o\)[ :]*,$(OBJODIR)/\1 $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
 $(OBJODIR)/%.o: %.cpp
@@ -440,7 +441,7 @@ $(OBJODIR)/%.d: %.cpp
 	@mkdir -p $(OBJODIR);
 	$(summary) DEPEND: CXX $(patsubst $(TOP_DIR)/%,%,$(CURDIR))/$<
 	@set -e; rm -f $@; \
-	sed 's,\($*\.o\)[ :]*,$(OBJODIR)/\1 $@ : ,g' < $@.$$$$ > $@; \
+	gsed 's,\($*\.o\)[ :]*,$(OBJODIR)/\1 $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
 $(OBJODIR)/%.o: %.s
@@ -452,7 +453,7 @@ $(OBJODIR)/%.d: %.s
 	@mkdir -p $(dir $@); \
 	set -e; rm -f $@; \
 	$(CC) -M $(CFLAGS) $< > $@.$$$$; \
-	sed 's,\($*\.o\)[ :]*,$(OBJODIR)/\1 $@ : ,g' < $@.$$$$ > $@; \
+	gsed 's,\($*\.o\)[ :]*,$(OBJODIR)/\1 $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
 $(OBJODIR)/%.o: %.S
@@ -464,7 +465,7 @@ $(OBJODIR)/%.d: %.S
 	@mkdir -p $(dir $@); \
 	set -e; rm -f $@; \
 	$(CC) -M $(CFLAGS) $< > $@.$$$$; \
-	sed 's,\($*\.o\)[ :]*,$(OBJODIR)/\1 $@ : ,g' < $@.$$$$ > $@; \
+	gsed 's,\($*\.o\)[ :]*,$(OBJODIR)/\1 $@ : ,g' < $@.$$$$ > $@; \
 	rm -f $@.$$$$
 
 $(foreach lib,$(GEN_LIBS),$(eval $(call ShortcutRule,$(lib),$(LIBODIR))))

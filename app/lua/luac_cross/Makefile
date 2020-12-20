@@ -9,7 +9,7 @@
 summary ?= @true
 
 CCFLAGS:= -I. -I.. -I../../include -I../../uzlib
-LDFLAGS:= -L$(SDK_DIR)/lib -L$(SDK_DIR)/ld -lm -ldl -Wl,-Map=mapfile
+LDFLAGS:= -L$(SDK_DIR)/lib -L$(SDK_DIR)/ld -lm -ldl -Wl
 
 CCFLAGS += -Wall
 
